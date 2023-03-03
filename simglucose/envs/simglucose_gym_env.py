@@ -309,4 +309,4 @@ class CartPoleEnv(gym.Env[np.ndarray, Union[int, np.ndarray]]):
 
             pygame.display.quit()
             pygame.quit()
-            self.isopen = False
+            self.isopen =False

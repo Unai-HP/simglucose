@@ -46,7 +46,12 @@ class T1DSimEnv(gym.Env):
             return self.env.step(act)
         return self.env.step(act, reward_fun=self.reward_fun)
 
-    def reset(self):
+    def reset(
+             self,
+             *,
+             seed: Optional[int] = None,
+             options: Optional[dict] = None,
+        ):
         self.env, _, _, _ = self.create_env_from_random_state(self.custom_scenario)
         obs, _, _, _ = self.env.reset()
         return obs

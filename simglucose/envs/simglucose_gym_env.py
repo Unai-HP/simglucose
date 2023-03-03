@@ -49,7 +49,7 @@ class T1DSimEnv(gym.Env):
     def reset(self):
         self.env, _, _, _ = self.create_env_from_random_state(self.custom_scenario)
         obs, _, _, _ = self.env.reset()
-        o = np.array([obs[0]])
+        o = obs
         print(o)
         return o
     

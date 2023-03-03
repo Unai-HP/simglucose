@@ -50,8 +50,8 @@ class T1DSimEnv(gym.Env):
         self.env, _, _, _ = self.create_env_from_random_state(self.custom_scenario)
         obs, _, _, _ = self.env.reset()
         print(obs)
-        return obs
-
+        return obs['CGM']
+    
     def seed(self, seed=None):
         self.np_random, seed1 = seeding.np_random(seed=seed)
         self.env, seed2, seed3, seed4 = self.create_env_from_random_state()

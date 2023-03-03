@@ -37,30 +37,30 @@ class T1DSimEnv(gym.Env):
         self.reward_fun = reward_fun
         self.np_random, _ = seeding.np_random(seed=seed)
         self.custom_scenario = custom_scenario
-        self.env, _, _, _ = self._create_env_from_random_state(custom_scenario)
+        self.env, _, _, _ = self.create_env_from_random_state(custom_scenario)
 
-    def _step(self, action):
+    def step(self, action):
         # This gym only controls basal insulin
         act = Action(basal=action, bolus=0)
         if self.reward_fun is None:
             return self.env.step(act)
         return self.env.step(act, reward_fun=self.reward_fun)
 
-    def _reset(self):
-        self.env, _, _, _ = self._create_env_from_random_state(self.custom_scenario)
+    def reset(self):
+        self.env, _, _, _ = self.create_env_from_random_state(self.custom_scenario)
         obs, _, _, _ = self.env.reset()
         return obs
 
-    def _seed(self, seed=None):
+    def seed(self, seed=None):
         self.np_random, seed1 = seeding.np_random(seed=seed)
-        self.env, seed2, seed3, seed4 = self._create_env_from_random_state()
+        self.env, seed2, seed3, seed4 = self.create_env_from_random_state()
         return [seed1, seed2, seed3, seed4]
 
-    def _create_env_from_random_state(self, custom_scenario=None):
+    def create_env_from_random_state(self, custom_scenario=None):
         # Derive a random seed. This gets passed as a uint, but gets
         # checked as an int elsewhere, so we need to keep it below
         # 2**31.
-        seed2 = seeding.hash_seed(self.np_random.randint(0, 1000)) % 2**31
+        seed2 = seeding.hash_seed(self.np_random.randint(2**31)) % 2**31
         seed3 = seeding.hash_seed(seed2 + 1) % 2**31
         seed4 = seeding.hash_seed(seed3 + 1) % 2**31
 
@@ -73,14 +73,14 @@ class T1DSimEnv(gym.Env):
         env = _T1DSimEnv(patient, sensor, pump, scenario)
         return env, seed2, seed3, seed4
 
-    def _render(self, mode='human', close=False):
+    def render(self, mode='human', close=False):
         self.env.render(close=close)
 
-    @property
-    def action_space(self):
-        ub = self.env.pump._params['max_basal']
-        return spaces.Box(low=0, high=ub, shape=(1,))
+    # @property
+    # def action_space(self):
+    #     ub = self.env.pump._params['max_basal']
+    #     return spaces.Box(low=0, high=ub, shape=(1,))
 
-    @property
-    def observation_space(self):
-        return spaces.Box(low=0, high=np.inf, shape=(1,))
+    # @property
+    # def observation_space(self):
+    #     return spaces.Box(low=0, high=np.inf, shape=(1,))

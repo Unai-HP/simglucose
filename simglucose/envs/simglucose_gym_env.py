@@ -37,7 +37,7 @@ class T1DSimEnv(gym.Env):
         self.reward_fun = reward_fun
         self.np_random, _ = seeding.np_random(seed=seed)
         self.custom_scenario = custom_scenario
-        self.env, _, _, _ = self._create_env_from_random_state(custom_scenario)
+        self.env, _, _, _ = self.create_env_from_random_state(custom_scenario)
 
     def step(self, action):
         # This gym only controls basal insulin
@@ -47,13 +47,13 @@ class T1DSimEnv(gym.Env):
         return self.env.step(act, reward_fun=self.reward_fun)
 
     def reset(self):
-        self.env, _, _, _ = self._create_env_from_random_state(self.custom_scenario)
+        self.env, _, _, _ = self.create_env_from_random_state(self.custom_scenario)
         obs, _, _, _ = self.env.reset()
         return obs
 
     def seed(self, seed=None):
         self.np_random, seed1 = seeding.np_random(seed=seed)
-        self.env, seed2, seed3, seed4 = self._create_env_from_random_state()
+        self.env, seed2, seed3, seed4 = self.create_env_from_random_state()
         return [seed1, seed2, seed3, seed4]
 
     def create_env_from_random_state(self, custom_scenario=None):

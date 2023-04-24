@@ -85,4 +85,4 @@ class T1DSimEnv(gym.Env):
 
     @property
     def observation_space(self):
-        return spaces.Box(low=0, high=np.inf, shape=(1,))
+        return spaces.Dict({"cgm":spaces.Box(low=0, high=np.inf, shape=(1,)), "CHO":spaces.Box(low=0, high=np.inf, shape=(1,)), "insulin":spaces.Box(low=0, high=np.inf, shape=(1,))})

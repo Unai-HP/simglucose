@@ -20,7 +20,7 @@ except ImportError:
         return _Step(observation, reward, done, kwargs)
 
 
-Observation = namedtuple('Observation', ['CGM'])
+Observation = namedtuple('Observation', ['CGM', 'CHO', 'insulin'])
 logger = logging.getLogger(__name__)
 
 
@@ -99,9 +99,10 @@ class T1DSimEnv(object):
         # Compute reward, and decide whether game is over
         window_size = int(60 / self.sample_time)
         BG_last_hour = self.CGM_hist[-window_size:]
+        CHO_last_hour = self.CHO_hist[-window_size:]
         reward = reward_fun(BG_last_hour)
         done = BG < 70 or BG > 350
-        obs = Observation(CGM=CGM)
+        obs = Observation(CGM=CGM, CHO=CHO, insulin=insulin)
 
         return Step(observation=obs,
                     reward=reward,
@@ -140,7 +141,7 @@ class T1DSimEnv(object):
         self.scenario.reset()
         self._reset()
         CGM = self.sensor.measure(self.patient)
-        obs = Observation(CGM=CGM)
+        obs = Observation(CGM=CGM, CHO=0, insulin=0)
         return Step(observation=obs,
                     reward=0,
                     done=False,

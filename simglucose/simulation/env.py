@@ -143,7 +143,8 @@ class T1DSimEnv(object):
         self.scenario.reset()
         self._reset()
         CGM = self.sensor.measure(self.patient)
-        obs = Observation(CGM=CGM, CHO=0, insulin=0)
+        obs = Observation(CGM=CGM)
+        #obs = Observation(CGM=CGM, CHO=0, insulin=0)
         return Step(observation=obs,
                     reward=0,
                     done=False,

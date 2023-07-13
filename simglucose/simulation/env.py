@@ -20,7 +20,8 @@ except ImportError:
         return _Step(observation, reward, done, kwargs)
 
 
-Observation = namedtuple('Observation', ['CGM', 'CHO', 'insulin'])
+#Observation = namedtuple('Observation', ['CGM', 'CHO', 'insulin'])
+Observation = namedtuple('Observation', ['CGM'])
 logger = logging.getLogger(__name__)
 
 
@@ -102,7 +103,8 @@ class T1DSimEnv(object):
         CHO_last_hour = self.CHO_hist[-window_size:]
         reward = reward_fun(BG_last_hour)
         done = BG < 70 or BG > 350
-        obs = Observation(CGM=CGM, CHO=CHO, insulin=insulin)
+        obs = Observation(CGM=CGM)
+        #obs = Observation(CGM=CGM, CHO=CHO, insulin=insulin)
 
         return Step(observation=obs,
                     reward=reward,
